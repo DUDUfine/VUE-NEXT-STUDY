@@ -12,8 +12,11 @@ export function patchStyle(el: Element, prev: Style, next: Style) {
       const current = style.display
       style.cssText = next
       // indicates that the `display` of the element is controlled by `v-show`,
+      // 表示元素的“显示”是由“v-show”控制的，
       // so we always keep the current `display` value regardless of the `style` value,
+      // 所以我们总是保持当前的display值而不管style值，
       // thus handing over control to `v-show`.
+      // 这样就把控制权交给了“v-show”。
       if ('_vod' in el) {
         style.display = current
       }
