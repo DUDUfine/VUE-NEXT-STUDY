@@ -123,6 +123,7 @@ const hyphenateRE = /\B([A-Z])/g
 /**
  * @private
  */
+// 将字符串中的大写字母前加一个'-';再转为小写 ，比如opneDialog => open-dialog
 export const hyphenate = cacheStringFunction((str: string) =>
   str.replace(hyphenateRE, '-$1').toLowerCase()
 )

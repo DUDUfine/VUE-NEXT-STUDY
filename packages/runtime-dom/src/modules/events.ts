@@ -120,7 +120,7 @@ function parseName(name: string): [string, EventListenerOptions | undefined] {
       options
     }
   }
-  return [hyphenate(name.slice(2)), options]
+  return [hyphenate(name.slice(2)), options] // 将事件名转为'-'格式，并返回事件名及修饰符
 }
 
 // 创建事件侦听器
@@ -155,6 +155,8 @@ function createInvoker(
   return invoker
 }
 
+// stopPropagation可以阻止事件冒泡，但不会影响改事件的其他监听方法执行，而stopImmediatePropagation不仅阻止事件冒泡，还会阻止该事件后面的监听方法执行
+// 处理事件向上冒泡
 function patchStopImmediatePropagation(
   e: Event,
   value: EventValue
