@@ -44,6 +44,7 @@ type ModelDirective<T> = ObjectDirective<T & { _assign: AssignerFn }>
 
 // We are exporting the v-model runtime directly as vnode hooks so that it can
 // be tree-shaken in case v-model is never used.
+// 我们直接将v-model运行时导出为vnode钩子，这样就可以被tree-shaken，以防v-model从未被使用。
 export const vModelText: ModelDirective<
   HTMLInputElement | HTMLTextAreaElement
 > = {
@@ -98,6 +99,7 @@ export const vModelText: ModelDirective<
   }
 }
 
+// checkbox 节点 vModel 数据绑定
 export const vModelCheckbox: ModelDirective<HTMLInputElement> = {
   created(el, _, vnode) {
     el._assign = getModelAssigner(vnode)
@@ -137,6 +139,7 @@ export const vModelCheckbox: ModelDirective<HTMLInputElement> = {
   }
 }
 
+// 设置check选项是否选中
 function setChecked(
   el: HTMLInputElement,
   { value, oldValue }: DirectiveBinding,
@@ -154,6 +157,7 @@ function setChecked(
   }
 }
 
+// radio 节点 vModel 数据绑定
 export const vModelRadio: ModelDirective<HTMLInputElement> = {
   created(el, { value }, vnode) {
     el.checked = looseEqual(value, vnode.props!.value)
@@ -170,6 +174,7 @@ export const vModelRadio: ModelDirective<HTMLInputElement> = {
   }
 }
 
+// select 节点数据绑定
 export const vModelSelect: ModelDirective<HTMLSelectElement> = {
   created(el, { value, modifiers: { number } }, vnode) {
     const isSetModel = isSet(value)
@@ -203,6 +208,7 @@ export const vModelSelect: ModelDirective<HTMLSelectElement> = {
   }
 }
 
+// 设置select 单选项 或 多选项 选中
 function setSelected(el: HTMLSelectElement, value: any) {
   const isMultiple = el.multiple
   if (isMultiple && !isArray(value) && !isSet(value)) {
@@ -220,6 +226,7 @@ function setSelected(el: HTMLSelectElement, value: any) {
       if (isArray(value)) {
         option.selected = looseIndexOf(value, optionValue) > -1
       } else {
+        // Set集合
         option.selected = value.has(optionValue)
       }
     } else {
@@ -235,11 +242,13 @@ function setSelected(el: HTMLSelectElement, value: any) {
 }
 
 // retrieve raw value set via :value bindings
+// 通过节点对象上绑定的_value值获取原始数据集,没有返回value上的值
 function getValue(el: HTMLOptionElement | HTMLInputElement) {
   return '_value' in el ? (el as any)._value : el.value
 }
 
 // retrieve raw value for true-value and false-value set via :true-value or :false-value bindings
+// 通过 checkbox 节点对象上绑定的_trueValue或_falseValue属性获取是否选中
 function getCheckboxValue(
   el: HTMLInputElement & { _trueValue?: any; _falseValue?: any },
   checked: boolean
@@ -297,6 +306,7 @@ function callModelHook(
 }
 
 // SSR vnode transforms
+// SSR 虚拟节点转换
 if (__NODE_JS__) {
   vModelText.getSSRProps = ({ value }) => ({ value })
 
